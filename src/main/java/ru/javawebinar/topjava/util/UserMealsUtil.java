@@ -121,8 +121,7 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByStreamsOpt2(List<UserMeal> meals, LocalTime startTime,
                                                                   LocalTime endTime, int caloriesPerDay) {
         return meals.stream()
-                .collect(Collectors.groupingBy(meal -> meal.getDateTime().toLocalDate()))
-                .values().stream()
+                .collect(Collectors.groupingBy(meal -> meal.getDateTime().toLocalDate())).values().stream()
                 .flatMap(mealGroupByDate -> {
                     boolean excess = mealGroupByDate.stream()
                                                     .mapToInt(UserMeal::getCalories).sum() > caloriesPerDay;
