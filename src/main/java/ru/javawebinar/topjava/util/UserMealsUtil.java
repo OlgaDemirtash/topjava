@@ -66,9 +66,7 @@ public class UserMealsUtil {
         return userMealWithExcess;
     }
 
-
-
-        private static List<UserMealWithExcessOpt2_1> filteredByCyclesOpt2_1(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    private static List<UserMealWithExcessOpt2_1> filteredByCyclesOpt2_1(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
             Map<LocalDate, Integer> caloriesDaySum = new HashMap<>();
             Map<LocalDate, Boolean[]> exceededMap = new HashMap<>();
             List<UserMealWithExcessOpt2_1> userMealWithExcess = new ArrayList<>();
@@ -116,7 +114,6 @@ public class UserMealsUtil {
                         caloriesDaySum.get(meal.getDateTime().toLocalDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
-
 
     public static List<UserMealWithExcess> filteredByStreamsOpt2(List<UserMeal> meals, LocalTime startTime,
                                                                   LocalTime endTime, int caloriesPerDay) {
