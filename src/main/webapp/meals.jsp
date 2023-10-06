@@ -11,11 +11,11 @@
 <hr>
 <h2>Meals</h2>
 <table class=table>
-    <thead>
+    <tr>
     <th>Date</th>
     <th>Description</th>
     <th>Calories</th>
-    </thead>
+    </tr>
     <tbody>
     <c:forEach items="${mealsTo}" var="meal">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
