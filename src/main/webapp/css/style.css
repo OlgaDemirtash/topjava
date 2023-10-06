@@ -19,9 +19,12 @@ table {
     border-collapse: collapse;
 }
 
-table thead th {
+table th {
     color: #777;
     background: rgba(0, 0, 0, .1);
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
 }
 
 table th,
