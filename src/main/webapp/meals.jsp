@@ -19,16 +19,8 @@
     <tbody>
     <c:forEach items="${mealsTo}" var="meal">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
-        <c:choose>
-            <c:when test="${meal.excess == true}">
-                <c:set var="textColor" value="exceeded"/>
-            </c:when>
-            <c:otherwise>
-                <c:set var="textColor" value="normal"/>
-            </c:otherwise>
-        </c:choose>
-        <tr class=${textColor}>
-            <td>${f:formatLocalDateTime(meal.dateTime, 'dd.MM.yyyy HH:mm')}</td>
+        <tr class=${meal.excess ? 'exceeded' : 'normal'}>
+            <td>${f:formatLocalDateTime(meal.dateTime)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
         </tr>
