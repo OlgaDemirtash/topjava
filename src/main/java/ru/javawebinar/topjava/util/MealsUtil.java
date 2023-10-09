@@ -40,6 +40,7 @@ public class MealsUtil {
                 .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(Collectors.toList());
     }
+
     public static List<MealTo> getMealWithExceed(List<Meal> meals, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
@@ -53,6 +54,6 @@ public class MealsUtil {
     }
 
     private static MealTo createTo(Meal meal, boolean excess) {
-        return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+        return new MealTo(meal.getMealId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 }

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://javawebinar.topjava.ru/functions" prefix="f" %>
 <html lang="ru">
@@ -10,11 +10,14 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<p><a class="customHref" href="mealController?action=insert">Add meal</a></p>
 <table class=table>
     <tr>
-    <th>Date</th>
-    <th>Description</th>
-    <th>Calories</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Calories</th>
+        <th></th>
+        <th></th>
     </tr>
     <tbody>
     <c:forEach items="${mealsTo}" var="meal">
@@ -23,6 +26,8 @@
             <td>${f:formatLocalDateTime(meal.dateTime)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
+            <td><a href="mealController?action=edit&mealId=<c:out value="${meal.mealId}"/>">Update</a></td>
+            <td><a href="mealController?action=delete&mealId=<c:out value="${meal.mealId}"/>">Delete</a></td>
         </tr>
     </c:forEach>
     </tbody>

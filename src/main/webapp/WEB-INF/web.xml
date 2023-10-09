@@ -23,4 +23,18 @@
         <servlet-name>mealServlet</servlet-name>
         <url-pattern>/meals</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>mealController</servlet-name>
+        <servlet-class>ru.javawebinar.topjava.web.MealController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mealController</servlet-name>
+        <url-pattern>/mealController</url-pattern>
+    </servlet-mapping>
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
 </web-app>
