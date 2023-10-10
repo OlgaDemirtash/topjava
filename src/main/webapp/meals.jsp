@@ -10,7 +10,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
-<p><a class="customHref" href="mealController?action=insert">Add meal</a></p>
+<p><a class="customHref" href="meals?action=insert">Add meal</a></p>
 <table class=table>
     <tr>
         <th>Date</th>
@@ -26,8 +26,8 @@
             <td>${f:formatLocalDateTime(meal.dateTime)}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
-            <td><a href="mealController?action=edit&mealId=<c:out value="${meal.mealId}"/>">Update</a></td>
-            <td><a href="mealController?action=delete&mealId=<c:out value="${meal.mealId}"/>">Delete</a></td>
+            <td><a href="meals?action=edit&id=${meal.id}">Update</a></td>
+            <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
         </tr>
     </c:forEach>
     </tbody>

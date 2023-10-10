@@ -10,19 +10,18 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Edit meal</h2>
-<form method="POST" action='mealController' name="frmAddMeal">
-   <%-- User ID : <input type="text" readonly="readonly" name="mealId"
-                     value="<c:out value="${meal.mealId}" />"/> <br/>
-    --%>
+<form method="POST" action='meals' name="frmAddMeal">
+   <input type="hidden" readonly="readonly" name="id"
+                     value="${meal.id}"/>
     DateTime : <input
            type="datetime-local" name="dateTime"
-           value="<c:out value="${meal.dateTime}" />"/> <br/>
+           value="${meal.dateTime}"/><br/>
     Description : <input
         type="text" name="description"
-        value="<c:out value="${meal.description}" />"/> <br/>
+        value="${meal.description}"/><br/>
     Calories : <input
         type="number" name="calories"
-        value="<c:out value="${meal.calories}" />"/> <br/>
+        value="${meal.calories}"/><br/>
        <button type = "submit">Save</button>
        <button onclick="window.history.back()" type="button">Cancel</button>
 </form>
