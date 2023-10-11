@@ -7,7 +7,7 @@ import java.util.List;
 public interface MealDao {
     Meal add(Meal meal);
 
-    void delete(Integer id);
+    void delete(int id);
 
     Meal update(Meal meal);
 

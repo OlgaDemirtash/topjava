@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class MealServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -22,20 +21,18 @@ public class MealServlet extends HttpServlet {
     private static final int CALORIES_PER_DAY = 2000;
     private MealDao dao;
 
-    public MealServlet() {
-    }
-
     @Override
     public void init() throws ServletException {
-        super.init();
         dao = new MapMealDao();
-        MealsUtil.getMockMeals().forEach(this::add);
+        MealsUtil.getMockMeals().forEach(meal -> dao.add(meal));
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String forward;
         String action = request.getParameter("action");
-
+        if (action == null) {
+            action = "";
+        }
         switch (action.toLowerCase()) {
             case ("delete"):
                 dao.delete(Integer.parseInt(request.getParameter("id")));
@@ -52,7 +49,7 @@ public class MealServlet extends HttpServlet {
                 break;
             default:
                 forward = LIST_MEAL;
-                request.setAttribute("mealsTo", MealsUtil.filteredByStreams(dao.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
+                request.setAttribute("mealsTo", MealsUtil.getMealsWithExcess(dao.getAll(), CALORIES_PER_DAY));
         }
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
@@ -71,10 +68,6 @@ public class MealServlet extends HttpServlet {
             meal.setId(Integer.parseInt(id));
             dao.update(meal);
         }
-        response.sendRedirect("meals?action=meals");
-    }
-
-    private void add(Meal meal) {
-        dao.add(meal);
+        response.sendRedirect("meals");
     }
 }
