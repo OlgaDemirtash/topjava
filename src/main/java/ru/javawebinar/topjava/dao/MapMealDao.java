@@ -26,11 +26,7 @@ public class MapMealDao implements MealDao {
 
     @Override
     public Meal update(Meal meal) {
-        Meal oldMeal = storage.replace(meal.getId(), meal);
-        if (oldMeal == null) {
-            return null;
-        }
-        return meal;
+        return storage.computeIfPresent(meal.getId(), (k,v) -> meal);
     }
 
     @Override
