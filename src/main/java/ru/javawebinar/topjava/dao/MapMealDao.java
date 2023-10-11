@@ -21,18 +21,15 @@ public class MapMealDao implements MealDao {
 
     @Override
     public void delete(int id) {
-        if (id == 0) {
-            return;
-        }
         storage.remove(id);
     }
 
     @Override
     public Meal update(Meal meal) {
-        if (meal.getId() == null) {
+        Meal oldMeal = storage.replace(meal.getId(), meal);
+        if (oldMeal == null) {
             return null;
         }
-        storage.replace(meal.getId(), meal);
         return meal;
     }
 
@@ -42,7 +39,7 @@ public class MapMealDao implements MealDao {
     }
 
     @Override
-    public Meal getById(Integer id) {
-        return id != null ? storage.get(id) : null;
+    public Meal getById(int id) {
+        return storage.get(id);
     }
 }
