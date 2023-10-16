@@ -1,9 +1,48 @@
 package ru.javawebinar.topjava.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.to.MealTo;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
 public class MealService {
 
     private MealRepository repository;
 
+    public MealService(MealRepository repository) {
+        this.repository = repository;
+    }
+
+    public Meal create(Meal meal, int userId) {
+        return repository.save(meal, userId);
+    }
+
+    public void delete(int id, int userId) {
+        checkNotFoundWithId(repository.delete(id, userId), id);
+    }
+
+    public Meal get(int id, int userId) {
+        return checkNotFoundWithId(repository.get(id, userId), id);
+    }
+
+    public List<Meal> getAll(int userId) {
+        return (List<Meal>) repository.getAll(userId);
+    }
+
+    public void update(Meal meal, int userId) {
+        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
+    }
+
+    public List<Meal> getAllFilteredByDateTime(int userId, LocalTime starTime, LocalTime endTime, LocalDate startDate, LocalDate endDate) {
+        return (List<Meal>) repository.getAllFilteredByDateTime(userId, starTime, endTime, startDate, endDate);
+    }
+
+    public List<MealTo> getAllTo(int userId) {
+        return  repository.getAllTo(userId);
+    }
 }
