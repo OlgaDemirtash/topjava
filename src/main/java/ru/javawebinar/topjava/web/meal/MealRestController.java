@@ -1,48 +1,62 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 import static ru.javawebinar.topjava.web.SecurityUtil.authUserId;
 
-public class MealRestController extends AbstractMealController {
+@Controller
+public class MealRestController {
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    public List<Meal> getAll() {
-        return super.getAll(authUserId());
+    @Autowired
+    private MealService service;
+
+    public List<MealTo> getAll() {
+        log.info("getAll");
+        return service.getAll(authUserId());
     }
 
-
-    public List<MealTo> getAllTo(int userId) {
-        return super.getAllTo(userId);
-    }
-
-    public List<Meal> getAllFilteredByDateTime(LocalDate startDate, LocalDate endDate,
+    public List<MealTo> getAllToFilteredByDateTime(LocalDate startDate, LocalDate endDate,
                                                LocalTime startTime, LocalTime endTime) {
+        log.info("getAllToFilteredByDateTime");
 
         if (startDate == null && endDate == null && startTime == null && endTime == null) {
-            return super.getAll(authUserId());
+            return getAll();
         }
-        return super.getAllFilteredByDateTime(authUserId(), startDate, endDate,
-                startTime, endTime);
+        return service.getAllFilteredByDateTime(authUserId(), startTime, endTime, startDate, endDate);
     }
 
     public Meal get(int id) {
-        return super.get(id, authUserId());
+        log.info("get {}", id);
+        return service.get(id, authUserId());
     }
 
     public Meal create(Meal meal) {
-        return super.create(meal, authUserId());
+        log.info("create {}", meal);
+        checkNew(meal);
+        return service.create(meal, authUserId());
     }
 
     public void delete(int id) {
-        super.delete(id, authUserId());
+        log.info("delete {}", id);
+        service.delete(id, authUserId());
     }
 
     public void update(Meal meal, int id) {
-        super.update(meal, id, authUserId());
+        log.info("update {} with id={}", meal, id);
+        assureIdConsistent(meal, id);
+        service.update(meal, authUserId());
     }
 }

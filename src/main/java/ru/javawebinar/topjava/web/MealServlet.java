@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.util.StringUtils;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.ServletException;
@@ -22,25 +22,18 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private static final int CURRENT_USER_ID = SecurityUtil.authUserId();
-
-    MealRestController mealRestController;
-    ConfigurableApplicationContext appCtxRef;
+    private MealRestController mealRestController;
+    private ConfigurableApplicationContext appCtx;
 
     @Override
     public void init() {
-        try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml")) {
-            //System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
-            mealRestController = appCtx.getBean(MealRestController.class);
-            //mealRestController.create(new Meal(null, LocalDateTime.now(), "description", 100, 1));
-            appCtxRef = appCtx;
-        }
-
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        mealRestController = appCtx.getBean(MealRestController.class);
     }
 
     @Override
     public void destroy() {
-        super.destroy();
-        appCtxRef.close();
+        appCtx.close();
     }
 
     @Override
@@ -66,7 +59,6 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);
@@ -102,12 +94,12 @@ public class MealServlet extends HttpServlet {
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
 
-        LocalTime startLocalTime = (startTime == null || startTime == "") ? LocalTime.MIN : LocalTime.parse(startTime);
-        LocalTime endLocalTime = (endTime == null || endTime == "") ? LocalTime.MAX : LocalTime.parse(endTime);
-        LocalDate startLocalDate = (startDate == null || startDate == "") ? LocalDate.MIN : LocalDate.parse(startDate);
-        LocalDate endLocalDate = (endDate == null || endDate == "") ? LocalDate.MAX : LocalDate.parse(endDate);
+        LocalTime startLocalTime = StringUtils.hasLength(startTime) ? LocalTime.parse(startTime) : null;
+        LocalTime endLocalTime = StringUtils.hasLength(endTime) ? LocalTime.parse(endTime) : null;
+        LocalDate startLocalDate = StringUtils.hasLength(startDate) ? LocalDate.parse(startDate) : null;
+        LocalDate endLocalDate = StringUtils.hasLength(endDate) ? LocalDate.parse(endDate) : null;
         request.setAttribute("meals",
-                MealsUtil.getTos(mealRestController.getAllFilteredByDateTime(SecurityUtil.authUserId(), startLocalDate, endLocalDate, startLocalTime, endLocalTime),
-                        SecurityUtil.authUserCaloriesPerDay()));
+                mealRestController.getAllToFilteredByDateTime(
+                        startLocalDate, endLocalDate, startLocalTime, endLocalTime));
     }
 }

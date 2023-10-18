@@ -18,8 +18,7 @@ import java.util.stream.Stream;
 
 public class MealsUtil {
     public static final int DEFAULT_CALORIES_PER_DAY = SecurityUtil.authUserCaloriesPerDay();
-    private static int CURRENT_USER_ID = SecurityUtil.authUserId();
-
+    private static int CURRENT_USER_ID = 1;
 
     public static final List<Meal> meals = Arrays.asList(
             new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500, CURRENT_USER_ID),
