@@ -20,7 +20,7 @@ public class UserServlet extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.debug("forward to users");
+        log.debug("set user authorization & redirect to meal");
         request.setAttribute("user", SecurityUtil.authUserId());
         String userParameter = request.getParameter("user");
         if (userParameter != null) {
@@ -28,6 +28,5 @@ public class UserServlet extends HttpServlet {
             SecurityUtil.setAuthUser(user);
             response.sendRedirect("meals");
         }
-
     }
 }

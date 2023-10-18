@@ -16,25 +16,13 @@ public class MealsUtil {
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
-
     public static final List<Meal> meals = Arrays.asList(
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500,
-            1),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000, 1),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500, 1),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100,
-            1),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000,
-            1),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500, 1),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410, 1),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500,
-            2),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000, 2),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500, 2),
-        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100,
-            2)
-    );
+        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
+        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
+        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
+        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
+        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
+        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Поздний ужин", 500));
 
     public static List<MealTo> getTos(List<Meal> meals, int caloriesPerDay) {
         return filterByPredicate(meals, caloriesPerDay, meal -> true);
@@ -44,8 +32,8 @@ public class MealsUtil {
         List<Meal> meals, int caloriesPerDay, LocalTime startTime, LocalTime endTime,
         LocalDate startDate, LocalDate endDate) {
         return filterByPredicate(meals, caloriesPerDay,
-            meal -> (DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime)) &&
-                (DateTimeUtil.isBetweenLocalDates(meal.getDate(), startDate, endDate)));
+            meal -> (DateTimeUtil.isBetweenLocalDateTime(meal.getDateTime(),
+                LocalDateTime.of(startDate, startTime), LocalDateTime.of(endDate, endTime))));
     }
 
     private static List<MealTo> filterByPredicate(List<Meal> meals, int caloriesPerDay,
