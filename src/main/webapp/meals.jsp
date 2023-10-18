@@ -20,8 +20,6 @@
 </head>
 <body>
 <section>
-
-
     <div class="container">
         <h3><a href="index.html">Home</a></h3>
         <hr/>
@@ -32,19 +30,19 @@
                     <div class="row">
                         <div class="col-2">
                             <label for="startDate">От даты (включая)</label>
-                            <input type="date" name="startDate" id="startDate" autocomplete="off">
+                            <input type="date" name="startDate" value = "${param.startDate}" id="startDate" autocomplete="off">
                         </div>
                         <div class="col-2">
                             <label for="endDate">До даты (включая)</label>
-                            <input type="date" name="endDate" id="endDate" autocomplete="off">
+                            <input type="date" name="endDate" value = "${param.endDate}" id="endDate" autocomplete="off">
                         </div>
                         <div class="offset-2 col-3">
                             <label for="startTime">От времени (включая)</label>
-                            <input type="time" name="startTime" id="startTime" autocomplete="off">
+                            <input type="time" name="startTime" value = "${param.startTime}" id="startTime" autocomplete="off">
                         </div>
                         <div class="col-3">
                             <label for="endTime">До времени (исключая)</label>
-                            <input type="time" name="endTime" id="endTime" autocomplete="off">
+                            <input type="time" name="endTime" value = "${param.endTime}" id="endTime" autocomplete="off">
                         </div>
                     </div>
                 </form>

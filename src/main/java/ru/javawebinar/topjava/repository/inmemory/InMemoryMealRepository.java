@@ -1,11 +1,5 @@
 package ru.javawebinar.topjava.repository.inmemory;
 
-import org.springframework.stereotype.Repository;
-import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.util.DateTimeUtil;
-import ru.javawebinar.topjava.util.MealsUtil;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
@@ -15,14 +9,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 @Repository
 public class InMemoryMealRepository implements MealRepository {
+
     private final Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.meals.forEach(meal -> save(meal, 1));
+
+        MealsUtil.meals.forEach(meal -> save(meal, meal.getUserId()));
+        MealsUtil.meals.forEach(meal -> save(meal, meal.getUserId()));
     }
 
     @Override
@@ -32,8 +34,8 @@ public class InMemoryMealRepository implements MealRepository {
             repository.put(meal.getId(), meal);
             return meal;
         }
-        Meal mealCheckedId = repository.get(meal.getId());
-        if (mealCheckedId != null && mealCheckedId.getUserId() != userId) {
+        Meal currentIdMeal = repository.get(meal.getId());
+        if (currentIdMeal != null && currentIdMeal.getUserId() != userId) {
             return null;
         }
         // handle case: update, but not present in storage
@@ -57,7 +59,7 @@ public class InMemoryMealRepository implements MealRepository {
         return filterByPredicate(userId, meal -> true);
     }
 
-    public List<Meal> filterByPredicate(int userId, Predicate<Meal> filter) {
+    private List<Meal> filterByPredicate(int userId, Predicate<Meal> filter) {
         return repository.values()
                 .stream()
                 .filter(meal -> meal.getUserId() == userId)
