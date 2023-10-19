@@ -21,7 +21,6 @@ import ru.javawebinar.topjava.util.MealsUtil;
 public class MealRestController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private MealService service;
 
@@ -43,7 +42,7 @@ public class MealRestController {
         return MealsUtil.getFilteredTos(
             service.getAllFilteredByDateTime(authUserId(), LocalTime.MIN, LocalTime.MAX, startDate,
                 endDate),
-            authUserCaloriesPerDay(), startTime, endTime, startDate, endDate);
+            authUserCaloriesPerDay(), startTime, endTime);
     }
 
     public Meal get(int id) {

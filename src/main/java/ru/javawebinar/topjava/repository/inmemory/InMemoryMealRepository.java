@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.repository.inmemory;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -24,16 +25,15 @@ public class InMemoryMealRepository implements MealRepository {
 
     {
         MealsUtil.meals.forEach(meal -> save(meal, 1));
-        MealsUtil.meals.forEach(meal -> meal.setId(null));
-        MealsUtil.meals.forEach(meal -> save(meal, 2));
+        MealsUtil.meals.forEach(meal -> save(meal.clone(), 2));
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
         if (meal.isNew()) {
             meal.setId(counter.incrementAndGet());
-            Map<Integer, Meal> meals = repository.compute(userId, (currentUserId, oldUserMeals) ->
-                (oldUserMeals == null ? new ConcurrentHashMap<>() : oldUserMeals));
+            Map<Integer, Meal> meals = repository.computeIfAbsent(userId,
+                oldMeals -> new ConcurrentHashMap<>());
             return meals.put(meal.getId(), meal);
         } else {
             Map<Integer, Meal> mealsForUser = repository.get(userId);
@@ -57,7 +57,8 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return filterByPredicate(userId, meal -> true);
+        List<Meal> meals = filterByPredicate(userId, meal -> true);
+        return (meals == null) ? new ArrayList<>() : meals;
     }
 
     private List<Meal> filterByPredicate(int userId, Predicate<Meal> filter) {
@@ -66,8 +67,7 @@ public class InMemoryMealRepository implements MealRepository {
             return userMeals.values()
                 .stream()
                 .filter(filter)
-                .sorted(Comparator.comparing(Meal::getDate).reversed()
-                    .thenComparing(Meal::getDescription))
+                .sorted(Comparator.comparing(Meal::getDate).reversed())
                 .collect(Collectors.toList());
         }
         return null;
@@ -75,8 +75,9 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getAllFilteredByDateTime(int userId, LocalTime startTime, LocalTime endTime, LocalDate startDate, LocalDate endDate) {
-        return filterByPredicate(userId,
+        List<Meal> meals = filterByPredicate(userId,
             meal -> (DateTimeUtil.isBetweenLocalDateTime(meal.getDateTime(),
                 LocalDateTime.of(startDate, startTime), LocalDateTime.of(endDate, endTime))));
+        return (meals == null) ? new ArrayList<>() : meals;
     }
 }
