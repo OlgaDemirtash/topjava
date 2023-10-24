@@ -21,7 +21,6 @@ import static ru.javawebinar.topjava.MealTestData.getUpdated;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -50,10 +49,6 @@ public class MealServiceTest {
 
   @Autowired
   private MealService service;
-
-  @Before
-  public void setUp() throws Exception {
-  }
 
   @Test
   public void get() {
