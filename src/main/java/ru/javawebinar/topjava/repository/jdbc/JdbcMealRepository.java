@@ -26,30 +26,27 @@ public class JdbcMealRepository implements MealRepository {
     private final SimpleJdbcInsert insertMeal;
 
     @Autowired
-    public JdbcMealRepository(
-        JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
-            .withTableName("meals")
+    public JdbcMealRepository(JdbcTemplate jdbcTemplate,
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.insertMeal = new SimpleJdbcInsert(jdbcTemplate).withTableName("meals")
             .usingGeneratedKeyColumns("id");
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
+
     @Override
     public Meal save(Meal meal, int userId) {
-        MapSqlParameterSource map = new MapSqlParameterSource()
-            .addValue("id", meal.getId())
-            .addValue("datetime", meal.getDateTime())
-            .addValue("description", meal.getDescription())
-            .addValue("calories", meal.getCalories())
-            .addValue("user_id", userId);
+        MapSqlParameterSource map = new MapSqlParameterSource().addValue("id", meal.getId())
+            .addValue("datetime", meal.getDateTime()).addValue("description", meal.getDescription())
+            .addValue("calories", meal.getCalories()).addValue("user_id", userId);
 
         if (meal.isNew()) {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
         } else if (namedParameterJdbcTemplate.update(
-            "UPDATE meals SET datetime=:datetime, description=:description, calories=:calories" +
-                " WHERE id=:id AND user_id=:user_id", map) == 0) {
+            "UPDATE meals SET datetime=:datetime, description=:description, calories=:calories"
+                + " WHERE id=:id AND user_id=:user_id", map) == 0) {
             return null;
         }
         return meal;
@@ -57,7 +54,7 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        return jdbcTemplate.update("DELETE FROM meals WHERE id=?", id) != 0;
+        return jdbcTemplate.update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId) != 0;
     }
 
     @Override
@@ -74,9 +71,10 @@ public class JdbcMealRepository implements MealRepository {
     }
 
     @Override
-    public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
+    public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime,
+        int userId) {
         return jdbcTemplate.query(
-            "SELECT * FROM meals WHERE user_id=? AND datetime BETWEEN ? AND ? ORDER BY datetime DESC",
+            "SELECT * FROM meals WHERE user_id=? AND datetime >= ? AND datetime < ? ORDER BY datetime DESC",
             ROW_MAPPER, userId, startDateTime, endDateTime);
     }
 }
