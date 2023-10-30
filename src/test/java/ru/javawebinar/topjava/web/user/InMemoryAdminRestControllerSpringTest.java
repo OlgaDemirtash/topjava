@@ -14,9 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.repository.inmemory.InMemoryUserRepository;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-@ContextConfiguration("classpath:spring/spring-app.xml")
+@ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/inmemory.xml"})
 @RunWith(SpringRunner.class)
-@Ignore
 public class InMemoryAdminRestControllerSpringTest {
 
     @Autowired
