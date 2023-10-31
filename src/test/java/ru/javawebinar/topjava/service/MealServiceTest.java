@@ -1,20 +1,16 @@
 package ru.javawebinar.topjava.service;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
-import static org.junit.Assert.fail;
-import org.junit.AssumptionViolatedException;
+import static org.junit.Assert.assertThrows;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.Stopwatch;
-import org.junit.rules.TestName;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +19,22 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import static ru.javawebinar.topjava.MealTestData.ADMIN_MEAL_ID;
+import static ru.javawebinar.topjava.MealTestData.MEAL1_ID;
+import static ru.javawebinar.topjava.MealTestData.MEAL_MATCHER;
+import static ru.javawebinar.topjava.MealTestData.NOT_FOUND;
+import static ru.javawebinar.topjava.MealTestData.adminMeal1;
+import static ru.javawebinar.topjava.MealTestData.getNew;
+import static ru.javawebinar.topjava.MealTestData.getUpdated;
+import static ru.javawebinar.topjava.MealTestData.meal1;
+import static ru.javawebinar.topjava.MealTestData.meal2;
+import static ru.javawebinar.topjava.MealTestData.meal3;
+import static ru.javawebinar.topjava.MealTestData.meals;
 import ru.javawebinar.topjava.TimingRules;
-import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
-
-import java.time.LocalDate;
-import java.time.Month;
-
-import static org.junit.Assert.assertThrows;
-import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",

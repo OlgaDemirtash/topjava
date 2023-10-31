@@ -33,7 +33,7 @@ public class Meal extends AbstractBaseEntity {
 
     public static final String GET_ALL_BETWEEN_DATES = "Meal.getAllBetweenHalfOpen";
 
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()", updatable = true)
+    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     private LocalDateTime dateTime;
 
