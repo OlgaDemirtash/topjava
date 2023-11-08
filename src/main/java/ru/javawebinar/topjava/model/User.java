@@ -54,8 +54,8 @@ public class User extends AbstractNamedEntity {
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Meal> meals;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="user")
+    private List<Meal> meals;
 
     public User() {
     }
@@ -126,9 +126,9 @@ public class User extends AbstractNamedEntity {
         return password;
     }
 
-//    public List<Meal> getMeals() {
-//        return meals;
-//    }
+    public List<Meal> getMeals() {
+        return meals;
+    }
 
     @Override
     public String toString() {
@@ -140,5 +140,9 @@ public class User extends AbstractNamedEntity {
                 ", roles=" + roles +
                 ", caloriesPerDay=" + caloriesPerDay +
                 '}';
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
     }
 }

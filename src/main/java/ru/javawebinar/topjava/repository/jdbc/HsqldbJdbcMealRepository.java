@@ -21,12 +21,14 @@ import java.util.List;
 @Repository
 @Profile(Profiles.HSQL_DB)
 public class HsqldbJdbcMealRepository extends JdbcMealRepository {
+
+    @Autowired
     public HsqldbJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
     @Override
-    public Object getDateTime(LocalDateTime dateTime) {
+    public Timestamp getDateTime(LocalDateTime dateTime) {
         return Timestamp.valueOf(dateTime);
     }
 }

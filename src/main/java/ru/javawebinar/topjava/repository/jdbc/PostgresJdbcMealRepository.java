@@ -22,12 +22,13 @@ import java.util.List;
 @Profile(Profiles.POSTGRES_DB)
 public class PostgresJdbcMealRepository extends JdbcMealRepository {
 
+    @Autowired
     public PostgresJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
     }
 
     @Override
-    public Object getDateTime(LocalDateTime dateTime) {
+    public LocalDateTime getDateTime(LocalDateTime dateTime) {
         return dateTime;
     }
 }
