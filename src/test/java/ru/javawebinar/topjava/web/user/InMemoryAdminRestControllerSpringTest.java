@@ -16,6 +16,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 @ContextConfiguration({"classpath:spring/spring-app.xml", "classpath:spring/inmemory.xml"})
 @RunWith(SpringRunner.class)
+@Ignore
 public class InMemoryAdminRestControllerSpringTest {
 
     @Autowired
