@@ -27,17 +27,14 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 @RequestMapping("/meals")
 public class JspMealController extends AbstractMealController {
 
-    private static final Logger log = LoggerFactory.getLogger(RootController.class);
-
     public JspMealController(MealService service) {
         super(service);
     }
 
     @PostMapping
-    public String post(HttpServletRequest request) throws UnsupportedEncodingException {
+    public String post(HttpServletRequest request) {
 
-        log.info("meals");
-        request.setCharacterEncoding("UTF-8");
+        log.info("post meals");
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
