@@ -1,17 +1,22 @@
 package ru.javawebinar.topjava.to;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class MealTo {
-    private final Integer id;
 
-    private final LocalDateTime dateTime;
+    private Integer id;
 
-    private final String description;
+    private LocalDateTime dateTime;
 
-    private final int calories;
+    private String description;
 
-    private final boolean excess;
+    private int calories;
+
+    private boolean excess;
+
+    public MealTo() {
+    }
 
     public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.id = id;
@@ -50,5 +55,25 @@ public class MealTo {
                 ", calories=" + calories +
                 ", excess=" + excess +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.dateTime, this.description, this.calories, this.excess);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (!getClass().equals(obj.getClass())) {
+            return false;
+        }
+        MealTo mealTo = (MealTo) obj;
+        return this.calories == mealTo.getCalories() &&
+                this.excess == mealTo.isExcess() &&
+                Objects.equals(this.id, mealTo.getId()) &&
+                Objects.equals(this.dateTime, mealTo.getDateTime()) &&
+                Objects.equals(this.description, mealTo.getDescription());
     }
 }
