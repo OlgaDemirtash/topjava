@@ -13,8 +13,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,7 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
-import static ru.javawebinar.topjava.UserTestData.user;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -48,7 +45,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 MealsUtil.createTo(meal3, false),
                 MealsUtil.createTo(meal2, false),
                 MealsUtil.createTo(meal1, false));
-        perform(MockMvcRequestBuilders.get(REST_URL + "filter?start=" + "2020-01-30T00:00" + "&end=" + "2020-01-30T23:00", USER_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL + "filter?startDate=" + "2020-01-30" + "&endDate=" + "2020-01-30"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -69,6 +66,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL + MEAL1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
+                .andDo(print())
                 .andExpect(status().isNoContent());
 
         MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, USER_ID), updated);
@@ -80,6 +78,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newMeal)))
+                .andDo(print())
                 .andExpect(status().isCreated());
 
         Meal created = MEAL_MATCHER.readFromJson(action);
