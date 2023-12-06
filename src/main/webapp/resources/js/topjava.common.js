@@ -8,6 +8,10 @@ function makeEditable(datatableApi) {
             deleteRow($(this).closest('tr').attr("id"));
         }
     });
+    $(".update").click(function () {
+        updateRow($(this).closest('tr').attr("id"));
+    });
+
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -20,6 +24,16 @@ function makeEditable(datatableApi) {
 function add() {
     form.find(":input").val("");
     $("#editRow").modal();
+}
+
+function updateRow(id) {
+    form.find(":input").val("");
+    $.get(ctx.ajaxUrl + id, function (data) {
+        $.each(data, function (key, value) {
+            form.find("input[name='" + key + "']").val(value);
+        });
+        $('#editRow').modal();
+    });
 }
 
 function deleteRow(id) {
