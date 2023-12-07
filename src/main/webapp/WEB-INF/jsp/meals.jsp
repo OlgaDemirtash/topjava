@@ -82,7 +82,7 @@
             </div>
             <div class="modal-body">
                 <form id="detailsForm">
-                    <input type="hidden" id="id" name="id">
+                    <input type="hidden" id="id" name="id" >
 
                     <div class="form-group">
                         <label for="dateTime" class="col-form-label"><spring:message code="meal.dateTime"/></label>

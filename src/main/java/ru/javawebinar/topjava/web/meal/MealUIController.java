@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@Controller
-@RequestMapping(value = "/meals", produces = MediaType.APPLICATION_JSON_VALUE)
+@RestController
+@RequestMapping(value = "/profile/meals", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MealUIController extends AbstractMealController {
 
     @Override
