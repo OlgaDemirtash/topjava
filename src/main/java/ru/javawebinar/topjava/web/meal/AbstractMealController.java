@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
@@ -41,6 +42,14 @@ public abstract class AbstractMealController {
         return MealsUtil.getTos(service.getAll(userId), SecurityUtil.authUserCaloriesPerDay());
     }
 
+    public void create(MealTo mealTo) {
+        int userId = SecurityUtil.authUserId();
+        Meal meal = MealsUtil.createFromTo(mealTo);
+        log.info("create {} for user {}", meal, userId);
+        checkNew(meal);
+        service.create(meal, userId);
+    }
+
     public Meal create(Meal meal) {
         int userId = SecurityUtil.authUserId();
         log.info("create {} for user {}", meal, userId);
@@ -53,6 +62,13 @@ public abstract class AbstractMealController {
         log.info("update {} for user {}", meal, userId);
         assureIdConsistent(meal, id);
         service.update(meal, userId);
+    }
+
+    public void update(MealTo mealTo, int id) {
+        int userId = SecurityUtil.authUserId();
+        log.info("update {} with id={}", mealTo, id);
+        assureIdConsistent(mealTo, id);
+        service.update(mealTo, userId);
     }
 
     /**
