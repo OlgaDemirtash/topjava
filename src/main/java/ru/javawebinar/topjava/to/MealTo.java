@@ -1,40 +1,14 @@
 package ru.javawebinar.topjava.to;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.format.annotation.DateTimeFormat;
-import ru.javawebinar.topjava.util.DateTimeUtil;
-
-import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class MealTo extends BaseTo implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    @NotNull
-    @DateTimeFormat(pattern = DateTimeUtil.DATE_TIME_PATTERN)
+public class MealTo extends BaseTo{
     private LocalDateTime dateTime;
-
-    @NotBlank
-    @Size(min = 2, max = 120)
     private String description;
-
-    @Range(min = 10, max = 5000)
-    @NotNull
-    private Integer calories;
-
-    private final Boolean excess;
+    private int calories;
+    private final boolean excess;
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
     public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
@@ -65,11 +39,11 @@ public class MealTo extends BaseTo implements Serializable {
         return description;
     }
 
-    public Integer getCalories() {
+    public int getCalories() {
         return calories;
     }
 
-    public Boolean isExcess() {
+    public boolean isExcess() {
         return excess;
     }
 

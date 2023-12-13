@@ -38,7 +38,6 @@ public class AdminUIController extends AbstractUserController {
     }
 
     @PostMapping
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
         if (result.hasErrors()) {
             return ValidationUtil.prepareErrorFieldsMsg(result);
