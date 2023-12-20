@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 import ru.javawebinar.topjava.util.ValidationUtil;
+import ru.javawebinar.topjava.web.ExceptionInfoHandler;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminUIController extends AbstractUserController {
+
+    ExceptionInfoHandler exceptionInfoHandler;
 
     @Override
     @GetMapping
@@ -36,18 +39,18 @@ public class AdminUIController extends AbstractUserController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<String> createOrUpdate(@Valid UserTo userTo, BindingResult result) {
+    public void createOrUpdate(@Valid UserTo userTo, BindingResult result) {
         if (result.hasErrors()) {
             // TODO change to exception handler
-            return ValidationUtil.getErrorResponse(result);
+           // return ValidationUtil.getErrorResponse(result);
         }
+
         if (userTo.isNew()) {
             super.create(userTo);
         } else {
             super.update(userTo, userTo.id());
         }
-        return ResponseEntity.ok().build();
+        //return ResponseEntity.ok().build();
     }
 
     @Override

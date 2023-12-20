@@ -1,14 +1,16 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.util.ValidationUtil;
+import ru.javawebinar.topjava.util.exception.IllegalRequestDataException;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -19,6 +21,11 @@ import java.util.List;
 @RequestMapping(value = "/profile/meals", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MealUIController extends AbstractMealController {
 
+    public static final String EXCEPTION_DUPLICATE_DATE_TIME = "exception.meal.duplicateDateTime";
+
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     @GetMapping
     public List<MealTo> getAll() {
@@ -26,7 +33,7 @@ public class MealUIController extends AbstractMealController {
     }
 
     @Override
-    @GetMapping( "/{id}")
+    @GetMapping("/{id}")
     public Meal get(@PathVariable int id) {
         return super.get(id);
     }
@@ -40,17 +47,16 @@ public class MealUIController extends AbstractMealController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<String> createOrUpdate(@Valid Meal meal, BindingResult result) {
-        if (result.hasErrors()) {
-            // TODO change to exception handler
-            return ValidationUtil.getErrorResponse(result);
+    public void createOrUpdate(@Valid Meal meal) {
+        try {
+            if (meal.isNew()) {
+                super.create(meal);
+            } else {
+                super.update(meal, meal.getId());
+            }
+        } catch (DataIntegrityViolationException e) {
+            throw new IllegalRequestDataException(messageSource.getMessage(EXCEPTION_DUPLICATE_DATE_TIME, null, LocaleContextHolder.getLocale()));
         }
-        if (meal.isNew()) {
-            super.create(meal);
-        } else {
-            super.update(meal, meal.getId());
-        }
-        return ResponseEntity.ok().build();
     }
 
     @Override
